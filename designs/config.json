@@ -1,5 +1,5 @@
 {
-    "DESIGN_NAME": "and_gate",
+    "DESIGN_NAME": "and_gate1",
     "VERILOG_FILES": "dir::src/and_gate.v",
     "CLOCK_PERIOD": 10
 }
