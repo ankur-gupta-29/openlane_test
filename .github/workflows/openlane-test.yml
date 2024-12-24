@@ -1,0 +1,30 @@
+name: OpenLane Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  openlane:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up OpenLane
+        run: |
+          sudo apt update
+          sudo apt install -y docker.io
+          git clone https://github.com/The-OpenROAD-Project/OpenLane.git
+          cd OpenLane
+          make
+          make pdk
+
+      - name: Run OpenLane flow
+        run: |
+          cd OpenLane
+          docker run --rm -v $(pwd):/openlane_working_dir -w /openlane_working_dir \
+          efabless/openlane:latest ./flow.tcl -design /openlane_working_dir/designs/test_design
