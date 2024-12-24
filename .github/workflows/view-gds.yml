@@ -15,7 +15,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Step 2: Install KLayout (or Magic)
+      # Step 2: Install KLayout
       - name: Install KLayout
         run: |
           sudo apt update
@@ -23,17 +23,15 @@ jobs:
           wget https://www.klayout.org/downloads/Ubuntu-22/klayout_0.28.6-1_amd64.deb
           sudo apt install -y ./klayout_0.28.6-1_amd64.deb
 
-      # Step 3: Run KLayout on a GDS file
-      - name: View GDS file
+      # Step 3: Run the Ruby script with KLayout
+      - name: Run KLayout Script
         run: |
           mkdir -p outputs
-          klayout -b -r scripts/view_gds.lyt -rd input_file=designs/example.gds -rd output_dir=outputs
+          klayout -b -r scripts/view_gds.rb -rd input_file=designs/example.gds -rd output_file=outputs/screenshot.png
 
-      # Step 4: Upload results (optional)
-      - name: Upload GDS results
+      # Step 4: Upload the screenshot artifact
+      - name: Upload GDS screenshot
         uses: actions/upload-artifact@v3
         with:
-          name: gds-view-output
-          path: outputs/
-
-
+          name: gds-screenshot
+          path: outputs/screenshot.png
