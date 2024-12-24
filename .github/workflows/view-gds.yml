@@ -1,0 +1,39 @@
+name: GDS File Processing
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  view-gds:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Install KLayout (or Magic)
+      - name: Install KLayout
+        run: |
+          sudo apt update
+          sudo apt install -y wget
+          wget https://www.klayout.org/downloads/Ubuntu-22/klayout_0.28.6-1_amd64.deb
+          sudo apt install -y ./klayout_0.28.6-1_amd64.deb
+
+      # Step 3: Run KLayout on a GDS file
+      - name: View GDS file
+        run: |
+          mkdir -p outputs
+          klayout -b -r scripts/view_gds.lyt -rd input_file=designs/example.gds -rd output_dir=outputs
+
+      # Step 4: Upload results (optional)
+      - name: Upload GDS results
+        uses: actions/upload-artifact@v3
+        with:
+          name: gds-view-output
+          path: outputs/
+
+
