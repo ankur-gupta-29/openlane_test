@@ -37,3 +37,17 @@ jobs:
           echo "OPENRAM_HOME: $OPENRAM_HOME"
           echo "OPENRAM_TECH: $OPENRAM_TECH"
           echo "PYTHONPATH: $PYTHONPATH"
+                # Step 3: Check if the design folder exists and read a file from it
+      - name: Check and read file from design folder
+        run: |
+          if [ -d "design" ]; then
+            cd design
+            if [ -f "myconfig" ]; then  # Replace 'your_file.txt' with the actual file name
+              echo "File exists. Reading contents..."
+              cat myconfig  # Display the file contents
+            else
+              echo "File does not exist in the design folder."
+            fi
+          else
+            echo "Design folder does not exist."
+          fi
