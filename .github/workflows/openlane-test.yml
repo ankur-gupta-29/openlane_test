@@ -20,6 +20,7 @@ jobs:
         run: |
           git clone https://github.com/VLSIDA/OpenRAM.git
           cd OpenRAM
+          ./install_conda.sh
           ls > directory_listing.txt
           echo "Directory listing saved to directory_listing.txt"
 
