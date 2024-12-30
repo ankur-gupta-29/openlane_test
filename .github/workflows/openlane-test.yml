@@ -18,14 +18,13 @@ jobs:
       # Step 2: Clone OpenLane and setup
       - name: Clone and setup OpenLane
         run: |
-          git clone https://github.com/The-OpenROAD-Project/OpenLane.git
-          cd OpenLane
-          make install
+          git clone https://github.com/VLSIDA/OpenRAM.git
+          cd OpenRAM
           ls > directory_listing.txt
           echo "Directory listing saved to directory_listing.txt"
 
       # Step 3: Display saved directory listing
       - name: Display directory listing
         run: |
-          cd OpenLane
+          cd OpenRAM
           cat directory_listing.txt
