@@ -15,9 +15,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Make the script executable and run it
-      - name: Run installation script
+      # Step 2: Clone the OpenRAM repository and save the directory listing
+      - name: Clone OpenRAM and save directory listing
         run: |
           git clone https://github.com/VLSIDA/OpenRAM.git
           cd OpenRAM
-          echo ls
+          ls > directory_listing.txt
+          echo "Directory listing saved to directory_listing.txt"
+      
+      # Step 3: Display the saved directory listing
+      - name: Display directory listing
+        run: |
+          cd OpenRAM
+          cat directory_listing.txt
+
