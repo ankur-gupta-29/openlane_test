@@ -51,6 +51,9 @@ jobs:
       #     else
       #       echo "Design folder does not exist."
       #     fi
+      - name: List files in OpenRAM directory
+        run: |
+          ls -R $HOME/OpenRAM  # This will list all files recursively in the OpenRAM directory
       # Step 4: Run the sram_compiler.py script with the configuration from the design folder
       - name: Run sram_compiler.py with myconfig from design folder
         run: |
