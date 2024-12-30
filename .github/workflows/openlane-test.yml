@@ -23,6 +23,7 @@ jobs:
           ./install_conda.sh
           ls > directory_listing.txt
           echo "Directory listing saved to directory_listing.txt"
+          cat directory_listing.txt
 
       # Step 3: Define environment variables and persist them
       - name: Set environment variables
