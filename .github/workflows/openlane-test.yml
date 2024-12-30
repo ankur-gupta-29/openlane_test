@@ -40,8 +40,8 @@ jobs:
                 # Step 3: Check if the design folder exists and read a file from it
       - name: Check and read file from design folder
         run: |
-          if [ -d "design" ]; then
-            cd design
+          if [ -d "designs" ]; then
+            cd designs
             if [ -f "myconfig" ]; then  # Replace 'your_file.txt' with the actual file name
               echo "File exists. Reading contents..."
               cat myconfig  # Display the file contents
