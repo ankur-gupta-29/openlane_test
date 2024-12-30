@@ -21,6 +21,7 @@ jobs:
           git clone https://github.com/VLSIDA/OpenRAM.git
           cd OpenRAM
           ./install_conda.sh
+          source miniconda/bin/activate
           export OPENRAM_HOME="$HOME/OpenRAM/compiler" >> ~/.bashrc
           export OPENRAM_TECH="$HOME/OpenRAM/technology" >> ~/.bashrc
           export PYTHONPATH=$OPENRAM_HOME >> ~/.bashrc
