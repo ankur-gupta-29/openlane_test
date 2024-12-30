@@ -20,4 +20,4 @@ jobs:
         run: |
           git clone https://github.com/VLSIDA/OpenRAM.git
           cd OpenRAM
-          ls
+          echo ls
