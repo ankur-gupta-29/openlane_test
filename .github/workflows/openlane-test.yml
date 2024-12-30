@@ -56,5 +56,5 @@ jobs:
         run: |
           source ~/.bashrc  # Ensure environment variables are sourced
           echo "Running sram_compiler.py with myconfig from design folder"
-          python3 $OPENRAM_HOME/../sram_compiler.py design/myconfig  # Adjust the path to your file in the design folder
+          python3 $HOME/OpenRAM/sram_compiler.py design/myconfig  # Adjust the path to your file in the design folder
 
