@@ -1,4 +1,4 @@
-name: Install OpenLane and Tools
+name: Install OpenRAM and Tools
 
 on:
   push:
@@ -15,28 +15,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Clone OpenLane and setup
-      - name: Clone and setup OpenLane
+      # Step 2: Clone OpenRAM and setup
+      - name: Clone and setup OpenRAM
         run: |
           git clone https://github.com/VLSIDA/OpenRAM.git
           cd OpenRAM
           ./install_conda.sh
-          source miniconda/bin/activate
-          export OPENRAM_HOME="$HOME/OpenRAM/compiler" >> ~/.bashrc
-          export OPENRAM_TECH="$HOME/OpenRAM/technology" >> ~/.bashrc
-          export PYTHONPATH=$OPENRAM_HOME >> ~/.bashrc
-          cat ~/.bashrc
           ls > directory_listing.txt
           echo "Directory listing saved to directory_listing.txt"
 
-      # Step 3: Display saved directory listing
-      - name: Display directory listing
+      # Step 3: Define environment variables
+      - name: Set environment variables
         run: |
-          cd OpenRAM
-          cat directory_listing.txt
-      # Step 4: Print environment variables
-      - name: Print environment variables
+          echo "export OPENRAM_HOME=$HOME/OpenRAM/compiler" >> $GITHUB_ENV
+          echo "export OPENRAM_TECH=$HOME/OpenRAM/technology" >> $GITHUB_ENV
+          echo "export PYTHONPATH=$OPENRAM_HOME" >> $GITHUB_ENV
+
+      # Step 4: Display environment variables
+      - name: Display environment variables
         run: |
-          source ~/.bashrc
           echo "OPENRAM_HOME: $OPENRAM_HOME"
           echo "OPENRAM_TECH: $OPENRAM_TECH"
+
