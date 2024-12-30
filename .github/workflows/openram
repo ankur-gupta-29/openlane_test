@@ -1,0 +1,23 @@
+name: Install OpenRAM and Tools
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  setup-env:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Make the script executable and run it
+      - name: Run installation script
+        run: |
+          git clone https://github.com/VLSIDA/OpenRAM.git
+          cd OpenRAM
+          ls
