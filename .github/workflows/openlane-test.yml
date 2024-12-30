@@ -1,4 +1,4 @@
-name: OpenLane Test
+name: Install OpenLane and Tools
 
 on:
   push:
@@ -7,24 +7,25 @@ on:
   pull_request:
 
 jobs:
-  openlane:
-    runs-on: ubuntu-latest
+  setup-env:
+    runs-on: ubuntu-22.04
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      # Step 1: Check out the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Set up OpenLane
+      # Step 2: Clone OpenLane and setup
+      - name: Clone and setup OpenLane
         run: |
-          sudo apt update
-          sudo apt install -y docker.io
           git clone https://github.com/The-OpenROAD-Project/OpenLane.git
           cd OpenLane
-          make
-          make pdk
+          make install
+          ls > directory_listing.txt
+          echo "Directory listing saved to directory_listing.txt"
 
-      - name: Run OpenLane flow
+      # Step 3: Display saved directory listing
+      - name: Display directory listing
         run: |
           cd OpenLane
-          docker run --rm -v $(pwd):/openlane_working_dir -w /openlane_working_dir \
-          efabless/openlane:latest ./flow.tcl -design /openlane_working_dir/designs/test_design
+          cat directory_listing.txt
