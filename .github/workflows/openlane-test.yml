@@ -21,6 +21,10 @@ jobs:
           git clone https://github.com/VLSIDA/OpenRAM.git
           cd OpenRAM
           ./install_conda.sh
+          export OPENRAM_HOME="$HOME/OpenRAM/compiler" >> ~/.bashrc
+          export OPENRAM_TECH="$HOME/OpenRAM/technology" >> ~/.bashrc
+          export PYTHONPATH=$OPENRAM_HOME >> ~/.bashrc
+          cat ~/.bashrc
           ls > directory_listing.txt
           echo "Directory listing saved to directory_listing.txt"
 
