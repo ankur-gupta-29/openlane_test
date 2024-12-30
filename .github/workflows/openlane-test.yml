@@ -38,16 +38,23 @@ jobs:
           echo "OPENRAM_TECH: $OPENRAM_TECH"
           echo "PYTHONPATH: $PYTHONPATH"
                 # Step 3: Check if the design folder exists and read a file from it
-      - name: Check and read file from design folder
+      # - name: Check and read file from design folder
+      #   run: |
+      #     if [ -d "designs" ]; then
+      #       cd designs
+      #       if [ -f "myconfig" ]; then  # Replace 'your_file.txt' with the actual file name
+      #         echo "File exists. Reading contents..."
+      #         cat myconfig  # Display the file contents
+      #       else
+      #         echo "File does not exist in the design folder."
+      #       fi
+      #     else
+      #       echo "Design folder does not exist."
+      #     fi
+      # Step 4: Run the sram_compiler.py script with the configuration from the design folder
+      - name: Run sram_compiler.py with myconfig from design folder
         run: |
-          if [ -d "designs" ]; then
-            cd designs
-            if [ -f "myconfig" ]; then  # Replace 'your_file.txt' with the actual file name
-              echo "File exists. Reading contents..."
-              cat myconfig  # Display the file contents
-            else
-              echo "File does not exist in the design folder."
-            fi
-          else
-            echo "Design folder does not exist."
-          fi
+          source ~/.bashrc  # Ensure environment variables are sourced
+          echo "Running sram_compiler.py with myconfig from design folder"
+          python3 $OPENRAM_HOME/../sram_compiler.py design/myconfig  # Adjust the path to your file in the design folder
+
