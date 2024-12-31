@@ -130,5 +130,5 @@ jobs:
     - name: Run OpenLane Smoke Test
       run: |
          make mount
-        ./flow.tcl designs/inverter_OL/config.json
+         ./flow.tcl designs/inverter_OL/config.json
 
