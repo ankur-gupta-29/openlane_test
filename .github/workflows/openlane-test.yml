@@ -102,6 +102,7 @@ jobs:
         sudo apt-get install netgen
         sudo apt-get install klayout
         sudo apt-get install magic
+        sudo apt install -y build-essential python3 python3-venv python3-pip python3-tk curl make git
         sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
     - name: Ensure Docker Group Exists (Skip if exists)
@@ -122,7 +123,10 @@ jobs:
 
     - name: Install OpenLane via pip
       run: |
-        python3 -m pip install openlane
+        git clone --depth 1 https://github.com/The-OpenROAD-Project/OpenLane.git
+        cd OpenLane/
+        make
+        make test
 
     - name: Run OpenLane Smoke Test
       run: |
