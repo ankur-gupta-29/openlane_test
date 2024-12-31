@@ -128,13 +128,13 @@ jobs:
         make
     - name: Mount OpenLane
       run: |
-        ENV_COMMAND=$(ENV_COMMAND) && \
-        ENV_COMMAND="${ENV_COMMAND/-ti/}" && \
-        make mount
+       export ENV_COMMAND="${ENV_COMMAND/-ti/}"
+       make mount
       env:
-        OPENLANE_DIR: ${{ github.workspace }}
-        HOME: /github/home
-        CI: true  # This is to indicate that we are in a CI environment
+       OPENLANE_DIR: /home/runner/work/openlane_test/openlane_test
+       HOME: /github/home
+       CI: true
+
     - name: Run OpenLane Smoke Test
       run: |
          # make mount
