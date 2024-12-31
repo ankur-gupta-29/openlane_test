@@ -125,12 +125,10 @@ jobs:
       run: |
         git clone --depth 1 https://github.com/The-OpenROAD-Project/OpenLane.git
         cd OpenLane/
-        make
+        make mount
 
     - name: Run OpenLane Smoke Test
       run: |
-         echo $(QUICK_RUN_DESIGN)
-         echo $(ENV_COMMAND)
          # make mount
          ./flow.tcl -design spm
          # ./flow.tcl designs/inverter_OL/config.json
