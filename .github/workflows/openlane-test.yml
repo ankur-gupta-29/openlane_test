@@ -125,10 +125,16 @@ jobs:
       run: |
         git clone --depth 1 https://github.com/The-OpenROAD-Project/OpenLane.git
         cd OpenLane/
-        make 
+        make
+    - name: Mount OpenLane
+      run: |
+        ENV_COMMAND=$(ENV_COMMAND) && \
+        ENV_COMMAND="${ENV_COMMAND/-ti/}" && \
         make mount
-        ./flow.tcl -design spm
-
+      env:
+        OPENLANE_DIR: ${{ github.workspace }}
+        HOME: /github/home
+        CI: true  # This is to indicate that we are in a CI environment
     - name: Run OpenLane Smoke Test
       run: |
          # make mount
