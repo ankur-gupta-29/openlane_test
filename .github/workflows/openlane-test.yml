@@ -99,11 +99,15 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
-    - name: Make Docker Available Without Root
+    - name: Ensure Docker Group Exists (Skip if exists)
       run: |
-        sudo groupadd docker
+        if ! grep -q '^docker:' /etc/group; then
+          sudo groupadd docker
+        fi
+
+    - name: Add User to Docker Group (No Reboot)
+      run: |
         sudo usermod -aG docker $USER
-        sudo reboot # Reboot the system for the changes to take effect
 
     - name: Verify Docker Installation
       run: |
@@ -118,3 +122,4 @@ jobs:
     - name: Run OpenLane Smoke Test
       run: |
         python3 -m openlane --dockerized --smoke-test
+
