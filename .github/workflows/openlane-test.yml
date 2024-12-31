@@ -125,7 +125,9 @@ jobs:
       run: |
         git clone --depth 1 https://github.com/The-OpenROAD-Project/OpenLane.git
         cd OpenLane/
+        make 
         make mount
+        ./flow.tcl -design spm
 
     - name: Run OpenLane Smoke Test
       run: |
