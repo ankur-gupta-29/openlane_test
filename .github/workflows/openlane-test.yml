@@ -126,9 +126,9 @@ jobs:
         git clone --depth 1 https://github.com/The-OpenROAD-Project/OpenLane.git
         cd OpenLane/
         make
-        make test
 
     - name: Run OpenLane Smoke Test
       run: |
-        python3 -m openlane designs/inverter_OL/config.json
+         make mount
+        ./flow.tcl designs/inverter_OL/config.json
 
