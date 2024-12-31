@@ -1,4 +1,68 @@
-name: Install OpenRAM and Tools
+# name: Install OpenRAM and Tools
+
+# on:
+#   push:
+#     branches:
+#       - main
+#   pull_request:
+
+# jobs:
+#   setup-env:
+#     runs-on: ubuntu-22.04
+
+#     steps:
+#       # Step 1: Check out the repository
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       # Step 2: Clone OpenRAM and setup
+#       - name: Clone and setup OpenRAM
+#         run: |
+#           git clone https://github.com/VLSIDA/OpenRAM.git
+#           cd OpenRAM
+#           ./install_conda.sh
+#           ls > directory_listing.txt
+#           echo "Directory listing saved to directory_listing.txt"
+#           cat directory_listing.txt
+
+#       # Step 3: Define environment variables and persist them
+#       - name: Set environment variables
+#         run: |
+#           echo "OPENRAM_HOME=$HOME/OpenRAM/compiler" >> $GITHUB_ENV
+#           echo "OPENRAM_TECH=$HOME/OpenRAM/technology" >> $GITHUB_ENV
+#           echo "PYTHONPATH=$OPENRAM_HOME" >> $GITHUB_ENV
+
+#       # Step 4: Display environment variables
+#       - name: Display environment variables
+#         run: |
+#           echo "OPENRAM_HOME: $OPENRAM_HOME"
+#           echo "OPENRAM_TECH: $OPENRAM_TECH"
+#           echo "PYTHONPATH: $PYTHONPATH"
+#                 # Step 3: Check if the design folder exists and read a file from it
+#       # - name: Check and read file from design folder
+#       #   run: |
+#       #     if [ -d "designs" ]; then
+#       #       cd designs
+#       #       if [ -f "myconfig" ]; then  # Replace 'your_file.txt' with the actual file name
+#       #         echo "File exists. Reading contents..."
+#       #         cat myconfig  # Display the file contents
+#       #       else
+#       #         echo "File does not exist in the design folder."
+#       #       fi
+#       #     else
+#       #       echo "Design folder does not exist."
+#       #     fi
+#       - name: List files in OpenRAM directory
+#         run: |
+#           ls -R   # This will list all files recursively in the OpenRAM directory
+#       # Step 4: Run the sram_compiler.py script with the configuration from the design folder
+#       - name: Run sram_compiler.py with myconfig from design folder
+#         run: |
+#           source ~/.bashrc  # Ensure environment variables are sourced
+#           echo "Running sram_compiler.py with myconfig from design folder"
+#           python3 sram_compiler.py design/myconfig  # Adjust the path to your file in the design folder
+
+name: OpenLane Workflow
 
 on:
   push:
@@ -7,58 +71,39 @@ on:
   pull_request:
 
 jobs:
-  setup-env:
-    runs-on: ubuntu-22.04
+  build:
+    runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out the repository
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout Code
+      uses: actions/checkout@v3
 
-      # Step 2: Clone OpenRAM and setup
-      - name: Clone and setup OpenRAM
-        run: |
-          git clone https://github.com/VLSIDA/OpenRAM.git
-          cd OpenRAM
-          ./install_conda.sh
-          ls > directory_listing.txt
-          echo "Directory listing saved to directory_listing.txt"
-          cat directory_listing.txt
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y curl git
 
-      # Step 3: Define environment variables and persist them
-      - name: Set environment variables
-        run: |
-          echo "OPENRAM_HOME=$HOME/OpenRAM/compiler" >> $GITHUB_ENV
-          echo "OPENRAM_TECH=$HOME/OpenRAM/technology" >> $GITHUB_ENV
-          echo "PYTHONPATH=$OPENRAM_HOME" >> $GITHUB_ENV
+    - name: Install Nix
+      run: |
+        curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix/pr/1145 | sh -s -- install --no-confirm --extra-conf "
+            extra-substituters = https://openlane.cachix.org
+            extra-trusted-public-keys = openlane.cachix.org-1:qqdwh+QMNGmZAuyeQJTH9ErW57OWSvdtuwfBKdS254E=
+        "
+        echo ". /nix/var/nix/profiles/default/etc/profile.d/nix.sh" >> $GITHUB_ENV
+        source $GITHUB_ENV
 
-      # Step 4: Display environment variables
-      - name: Display environment variables
-        run: |
-          echo "OPENRAM_HOME: $OPENRAM_HOME"
-          echo "OPENRAM_TECH: $OPENRAM_TECH"
-          echo "PYTHONPATH: $PYTHONPATH"
-                # Step 3: Check if the design folder exists and read a file from it
-      # - name: Check and read file from design folder
-      #   run: |
-      #     if [ -d "designs" ]; then
-      #       cd designs
-      #       if [ -f "myconfig" ]; then  # Replace 'your_file.txt' with the actual file name
-      #         echo "File exists. Reading contents..."
-      #         cat myconfig  # Display the file contents
-      #       else
-      #         echo "File does not exist in the design folder."
-      #       fi
-      #     else
-      #       echo "Design folder does not exist."
-      #     fi
-      - name: List files in OpenRAM directory
-        run: |
-          ls -R   # This will list all files recursively in the OpenRAM directory
-      # Step 4: Run the sram_compiler.py script with the configuration from the design folder
-      - name: Run sram_compiler.py with myconfig from design folder
-        run: |
-          source ~/.bashrc  # Ensure environment variables are sourced
-          echo "Running sram_compiler.py with myconfig from design folder"
-          python3 sram_compiler.py design/myconfig  # Adjust the path to your file in the design folder
+    - name: Enable Cachix Binary Cache
+      run: |
+        nix-env -f "<nixpkgs>" -iA cachix
+        sudo env PATH="$PATH" cachix use openlane
+        sudo pkill nix-daemon
 
+    - name: Clone OpenLane
+      run: |
+        git clone https://github.com/efabless/openlane2
+        cd openlane2
+
+    - name: Run OpenLane Smoke Test
+      run: |
+        cd openlane2
+        nix-shell --run "openlane --smoke-test"
