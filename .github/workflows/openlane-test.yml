@@ -89,7 +89,7 @@ jobs:
             extra-substituters = https://openlane.cachix.org
             extra-trusted-public-keys = openlane.cachix.org-1:qqdwh+QMNGmZAuyeQJTH9ErW57OWSvdtuwfBKdS254E=
         "
-        echo ". /nix/var/nix/profiles/default/etc/profile.d/nix.sh" >> $GITHUB_ENV
+        echo "source /nix/var/nix/profiles/default/etc/profile.d/nix.sh" >> $GITHUB_ENV
         source $GITHUB_ENV
 
     - name: Enable Cachix Binary Cache
@@ -107,3 +107,4 @@ jobs:
       run: |
         cd openlane2
         nix-shell --run "openlane --smoke-test"
+
