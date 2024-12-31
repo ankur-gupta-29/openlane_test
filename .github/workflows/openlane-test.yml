@@ -121,5 +121,5 @@ jobs:
 
     - name: Run OpenLane Smoke Test
       run: |
-        python3 -m openlane --dockerized --smoke-test
+        python3 -m openlane designs/inverter_OL/config.json
 
